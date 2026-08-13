@@ -7,7 +7,7 @@ Sistema web para la gestión de alquileres temporarios de una agencia inmobiliar
 
 * **Franco Javier Coria** - *[francojaviercoria2@gmail.com](mailto:francojaviercoria2@gmail.com)* - [@FrancoJCoria](https://github.com/FrancoJCoria) - Discord: `Franco Coria`
 * **Emiliano Leguizamón** - *[emilegui76@gmail.com](mailto:emilegui76@gmail.com)* - [@Emi-legui](https://github.com/Emi-legui) - Discord: `Emi-legui`
-
+* **Matías Agustín Ejarque** - *[ejarque016@gmail.com](mailto:ejarque016@gmail.com)* - [@matejarque](https://github.com/matejarqque) - Discord: `matejarque`
 ---
 
 ## 📐 Modelado de Datos
