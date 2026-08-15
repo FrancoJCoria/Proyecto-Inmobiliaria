@@ -1,39 +1,54 @@
-using System.Data.Common;
 using MySqlConnector;
+using Microsoft.Extensions.Configuration;
 
-namespace Proyecto_Inmobiliaria.Models;
+namespace Inmobiliaria.Models;
 
-public class RepositorioInquilino(MySqlDataSource database)
+
+public class RepositorioInquilino : RepositorioBase
 {
-    public async Task AltaAsync(Inquilino inquilino)
+    public RepositorioInquilino(IConfiguration configuration) : base(configuration) { }
+
+    public int Alta(Inquilino inquilino)
     {
-        await using var connection = await database.OpenConnectionAsync();
-        await using var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Inquilino (Dni, Nombre, Apellido, Telefono, Email, Estado) VALUES (@Dni, @Nombre, @Apellido, @Telefono, @Email, @Estado)";
+        int idGenerado = 0;
+        using var connection = new MySqlConnection(connectionString);
+        string consultaSql = @"INSERT INTO Inquilino (dni, nombre, apellido, telefono, email, estado)
+        VALUES (@dni, @nombre, @apellido, @telefono, @email, @estado);
+        SELECT LAST_INSERT_ID();";
+        using var command = new MySqlCommand(consultaSql, connection);
         BindParams(command, inquilino);
-        await command.ExecuteNonQueryAsync();
-        inquilino.Id = (int)command.LastInsertedId;
+        connection.Open();
+        idGenerado = Convert.ToInt32(command.ExecuteScalar());
+        inquilino.Id = idGenerado;
+        return idGenerado;
     }
 
-    public async Task ModificacionAsync(Inquilino inquilino)
+    public int Baja(Inquilino inquilino)
     {
-        await using var connection = await database.OpenConnectionAsync();
-        await using var command = connection.CreateCommand();
-        command.CommandText = "UPDATE Inquilino SET Dni = @Dni, Nombre = @Nombre, Apellido = @Apellido, Telefono = @Telefono, Email = @Email, Estado = @Estado WHERE Id = @Id";
+        int filasAfectadas = 0;
+        using var connection = new MySqlConnection(connectionString);
+        string consultaSql = @"DELETE FROM Inquilino WHERE id = @id";
+        using var command = new MySqlCommand(consultaSql, connection);
+        BindId(command, inquilino);
+        connection.Open();
+        filasAfectadas = command.ExecuteNonQuery();
+        return filasAfectadas;
+    }
+
+    public int Modificacion(Inquilino inquilino)
+    {
+        int filasAfectadas = 0;
+        using var connection = new MySqlConnection(connectionString);
+        string consultaSql = @"UPDATE Inquilino SET dni = @dni, nombre = @nombre, apellido = @apellido, telefono = @telefono, email = @email, estado = @estado WHERE id = @id";
+        using var command = new MySqlCommand(consultaSql, connection);
         BindParams(command, inquilino);
         BindId(command, inquilino);
-        await command.ExecuteNonQueryAsync();
+        connection.Open();
+        filasAfectadas = command.ExecuteNonQuery();
+        return filasAfectadas;
     }
 
-    public async Task BajaAsync(int id)
-    {
-        await using var connection  = await database.OpenConnectionAsync();
-        await using var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM Inquilino WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", id);
-        await command.ExecuteNonQueryAsync();
-    }
-    
+
     private static void BindId(MySqlCommand cmd, Inquilino inquilino)
     {
         cmd.Parameters.AddWithValue("@id", inquilino.Id);
@@ -41,12 +56,11 @@ public class RepositorioInquilino(MySqlDataSource database)
 
     private static void BindParams(MySqlCommand cmd, Inquilino inquilino)
     {
-        cmd.Parameters.AddWithValue("@Dni", inquilino.Dni);
-        cmd.Parameters.AddWithValue("@Nombre", inquilino.Nombre);
-        cmd.Parameters.AddWithValue("@Apellido", inquilino.Apellido);
-        cmd.Parameters.AddWithValue("@Telefono", inquilino.Telefono);
-        cmd.Parameters.AddWithValue("@Email", inquilino.Email);
-        cmd.Parameters.AddWithValue("@Estado", inquilino.Estado);
+        cmd.Parameters.AddWithValue("@dni", inquilino.Dni);
+        cmd.Parameters.AddWithValue("@nombre", inquilino.Nombre);
+        cmd.Parameters.AddWithValue("@apellido", inquilino.Apellido);
+        cmd.Parameters.AddWithValue("@telefono", inquilino.Telefono);
+        cmd.Parameters.AddWithValue("@email", inquilino.Email);
+        cmd.Parameters.AddWithValue("@estado", inquilino.Estado);
     }
 }
-
