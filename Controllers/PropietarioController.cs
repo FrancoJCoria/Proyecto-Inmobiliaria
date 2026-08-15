@@ -29,4 +29,66 @@ public class PropietarioController : Controller
             id = idGenerado,
             propietario = propie});
     }
+
+    [HttpPost]
+    public IActionResult Delete([FromBody] Propietario p)
+    {
+        if (p == null || string.IsNullOrEmpty(p.Dni))
+        {
+            return BadRequest(new { error = "Se requiere el DNI para dar de baja al propietario." });
+        }
+
+        try
+        {
+            p.Estado = false; // Forzamos la baja lógica
+            int filasAfectadas = _repositorio.Baja(p);
+
+            if (filasAfectadas == 0)
+            {
+                return NotFound(new { error = $"No se encontró ningún propietario con el DNI {p.Dni}." });
+            }
+
+            return Ok(new
+            {
+                mensaje = "Propietario dado de baja con éxito",
+                filasAfectadas = filasAfectadas
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = "Error al dar de baja", detalle = ex.Message });
+        }
+    }
+
+    [HttpPut]
+    [HttpPost]
+    public IActionResult Edit(int id, [FromBody] Propietario propietarioParams)
+    {
+        if (propietarioParams == null)
+        {
+            return BadRequest(new { error = "Los datos del propietario son requeridos" });
+        }
+
+        propietarioParams.IdPropietario = id;
+
+        try
+        {
+            int filasAfectadas = _repositorio.Modificacion(propietarioParams);
+
+            if (filasAfectadas == 0)
+            {
+                return NotFound(new { error = $"No se encontró ningún propietario con el ID {id} para modificar." });
+            }
+
+            return Ok(new
+            {
+                mensaje = "Propietario modificado",
+                filasAfectadas = filasAfectadas,
+                propietario = propietarioParams});
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = "Error en el servidor al modificar", detalle = ex.Message });
+        }
+    }
 }
