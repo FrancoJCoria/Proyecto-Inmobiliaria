@@ -27,9 +27,11 @@ public class RepositorioInquilino : RepositorioBase
     {
         int filasAfectadas = 0;
         using var connection = new MySqlConnection(connectionString);
-        string consultaSql = @"DELETE FROM Inquilino WHERE id = @id";
+        string consultaSql = @"UPDATE Inquilino SET estado = @estado WHERE dni = @dni";
         using var command = new MySqlCommand(consultaSql, connection);
         BindId(command, inquilino);
+        command.Parameters.AddWithValue("@estado", inquilino.Estado);
+        command.Parameters.AddWithValue("@dni", inquilino.Dni);
         connection.Open();
         filasAfectadas = command.ExecuteNonQuery();
         return filasAfectadas;
