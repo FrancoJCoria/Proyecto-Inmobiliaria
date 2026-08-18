@@ -73,4 +73,36 @@ public class RepositorioPropietario : RepositorioBase, IRepositorioPropietario
 
         return filasAfectadas;
     }
+
+    public IList<Propietario> ObtenerTodos()
+    {
+        var lista = new List<Propietario>();
+
+        using var conexion = new MySqlConnection(connectionString);
+        string consultaSql = @"SELECT idPropietario, nombre, apellido, dni, telefono, email, estado 
+                               FROM Propietario 
+                               WHERE estado = 1";
+
+        using var comando = new MySqlCommand(consultaSql, conexion);
+
+        conexion.Open();
+        using var leerLista = comando.ExecuteReader();
+
+        while (leerLista.Read())
+        {
+            var p = new Propietario
+            {
+                IdPropietario = leerLista.GetInt32("idPropietario"),
+                Nombre = leerLista.GetString("nombre"),
+                Apellido = leerLista.GetString("apellido"),
+                Dni = leerLista.GetString("dni"),
+                Telefono = leerLista.IsDBNull(v.GetOrdinal("telefono")) ? "" : leerLista.GetString("telefono"),
+                Email = leerLista.GetString("email"),
+                Estado = leerLista.GetBoolean("estado")};
+
+            lista.Add(p);
+        }
+
+        return lista;
+    }
 }

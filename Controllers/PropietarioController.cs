@@ -91,4 +91,11 @@ public class PropietarioController : Controller
             return StatusCode(500, new { error = "Error en el servidor al modificar", detalle = ex.Message });
         }
     }
+
+    [HttpGet]
+    public IActionResult Index()
+    {
+        var lista = _repositorio.ObtenerTodos();
+        return Ok(lista);
+    }
 }
