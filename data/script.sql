@@ -1,15 +1,18 @@
+CREATE DATABASE IF NOT EXISTS `inmobiliaria`;
+USE `inmobiliaria`;
+
 CREATE TABLE `Propietario` (
-  `id_propietario` int PRIMARY KEY,
+  `id_propietario` int PRIMARY KEY AUTO_INCREMENT,
   `dni` varchar(255),
   `nombre` varchar(255),
   `apellido` varchar(255),
   `telefono` varchar(255),
   `email` varchar(255),
-  `estado` varchar(255)
+  `estado` boolean
 );
 
 CREATE TABLE `Inmueble` (
-  `id_inmueble` int PRIMARY KEY,
+  `id_inmueble` int PRIMARY KEY AUTO_INCREMENT,
   `direccion` varchar(255),
   `cupo` int,
   `precio_dia` decimal,
@@ -22,19 +25,19 @@ CREATE TABLE `Inmueble` (
 );
 
 CREATE TABLE `TipoInmueble` (
-  `id_tipo` int PRIMARY KEY,
+  `id_tipo` int PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(255)
 );
 
 CREATE TABLE `ImagenInmueble` (
-  `id_imagen` int PRIMARY KEY,
+  `id_imagen` int PRIMARY KEY AUTO_INCREMENT,
   `url_imagen` varchar(255),
   `id_inmueble` int,
   `estado` varchar(255)
 );
 
 CREATE TABLE `Pago` (
-  `id_pago` int PRIMARY KEY,
+  `id_pago` int PRIMARY KEY AUTO_INCREMENT,
   `concepto` varchar(255),
   `fecha_pago` date,
   `importe` decimal,
@@ -45,7 +48,7 @@ CREATE TABLE `Pago` (
 );
 
 CREATE TABLE `Reserva` (
-  `id_reserva` int PRIMARY KEY,
+  `id_reserva` int PRIMARY KEY AUTO_INCREMENT,
   `fecha_inicio` date,
   `fecha_fin` date,
   `fecha_fin_efectiva` date,
@@ -58,7 +61,7 @@ CREATE TABLE `Reserva` (
 );
 
 CREATE TABLE `Usuario` (
-  `id_usuario` int PRIMARY KEY,
+  `id_usuario` int PRIMARY KEY AUTO_INCREMENT,
   `email` varchar(255),
   `clave` varchar(255),
   `nombre` varchar(255),
@@ -69,13 +72,13 @@ CREATE TABLE `Usuario` (
 );
 
 CREATE TABLE `Inquilino` (
-  `id_inquilino` int PRIMARY KEY,
+  `id_inquilino` int PRIMARY KEY AUTO_INCREMENT,
   `dni` varchar(255),
   `nombre` varchar(255),
   `apellido` varchar(255),
   `telefono` varchar(255),
   `email` varchar(255),
-  `estado` varchar(255)
+  `estado` boolean
 );
 
 ALTER TABLE `Inmueble` ADD FOREIGN KEY (`id_propietario`) REFERENCES `Propietario` (`id_propietario`);
