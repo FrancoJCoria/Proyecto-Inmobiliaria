@@ -7,4 +7,6 @@ public interface IRepositorioInquilino
     int Baja(Inquilino i);
 
     int Modificacion(Inquilino i);
+
+    IList<Inquilino> ObtenerTodos();
 }
