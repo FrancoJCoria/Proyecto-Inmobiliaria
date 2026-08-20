@@ -40,7 +40,7 @@ public class PropietarioController : Controller
 
         try
         {
-            p.Estado = false; // Forzamos la baja lógica
+            p.Estado = false;
             int filasAfectadas = _repositorio.Baja(p);
 
             if (filasAfectadas == 0)
@@ -51,8 +51,7 @@ public class PropietarioController : Controller
             return Ok(new
             {
                 mensaje = "Propietario dado de baja con éxito",
-                filasAfectadas = filasAfectadas
-            });
+                filasAfectadas = filasAfectadas});
         }
         catch (Exception ex)
         {
@@ -69,7 +68,7 @@ public class PropietarioController : Controller
             return BadRequest(new { error = "Los datos del propietario son requeridos" });
         }
 
-        propietarioParams.IdPropietario = id;
+        propietarioParams.Id_propietario = id;
 
         try
         {

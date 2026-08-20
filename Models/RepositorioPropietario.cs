@@ -26,7 +26,7 @@ public class RepositorioPropietario : RepositorioBase, IRepositorioPropietario
 
         conexion.Open();
         idGenerado = Convert.ToInt32(comando.ExecuteScalar());
-        propietarioParams.IdPropietario = idGenerado;
+        propietarioParams.Id_propietario = idGenerado;
 
         return idGenerado;
     }
@@ -57,7 +57,7 @@ public class RepositorioPropietario : RepositorioBase, IRepositorioPropietario
 
         string consultaSql = @"UPDATE Propietario SET nombre = @nombre, 
         apellido = @apellido, dni = @dni, telefono = @telefono, email = @email, estado = @estado 
-        WHERE idPropietario = @idPropietario";
+        WHERE id_propietario = @id_propietario";
 
         using var comando = new MySqlCommand(consultaSql, conexion);
         comando.Parameters.AddWithValue("@nombre", propietarioParams.Nombre);
@@ -66,7 +66,7 @@ public class RepositorioPropietario : RepositorioBase, IRepositorioPropietario
         comando.Parameters.AddWithValue("@telefono", propietarioParams.Telefono);
         comando.Parameters.AddWithValue("@email", propietarioParams.Email);
         comando.Parameters.AddWithValue("@estado", propietarioParams.Estado);
-        comando.Parameters.AddWithValue("@idPropietario", propietarioParams.IdPropietario);
+        comando.Parameters.AddWithValue("@id_propietario", propietarioParams.Id_propietario);
 
         conexion.Open();
         filasAfectadas = comando.ExecuteNonQuery();
@@ -79,9 +79,8 @@ public class RepositorioPropietario : RepositorioBase, IRepositorioPropietario
         var lista = new List<Propietario>();
 
         using var conexion = new MySqlConnection(connectionString);
-        string consultaSql = @"SELECT idPropietario, nombre, apellido, dni, telefono, email, estado 
-                               FROM Propietario 
-                               WHERE estado = 1";
+        string consultaSql = @"SELECT id_propietario, nombre, apellido, dni, telefono, email, estado 
+                               FROM Propietario WHERE estado = 1";
 
         using var comando = new MySqlCommand(consultaSql, conexion);
 
@@ -92,11 +91,11 @@ public class RepositorioPropietario : RepositorioBase, IRepositorioPropietario
         {
             var p = new Propietario
             {
-                IdPropietario = leerLista.GetInt32("idPropietario"),
+                Id_propietario = leerLista.GetInt32("id_propietario"),
                 Nombre = leerLista.GetString("nombre"),
                 Apellido = leerLista.GetString("apellido"),
                 Dni = leerLista.GetString("dni"),
-                Telefono = leerLista.IsDBNull(v.GetOrdinal("telefono")) ? "" : leerLista.GetString("telefono"),
+                Telefono = leerLista.IsDBNull(leerLista.GetOrdinal("telefono")) ? "" : leerLista.GetString("telefono"),
                 Email = leerLista.GetString("email"),
                 Estado = leerLista.GetBoolean("estado")};
 

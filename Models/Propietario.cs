@@ -9,7 +9,7 @@ public class Propietario{
     
     //[Key]
     //[Column("id_propietario")]
-    public int IdPropietario { get; set; }
+    public int Id_propietario { get; set; }
 
     //[Column("dni")]
     public string Dni { get; set; } = string.Empty;

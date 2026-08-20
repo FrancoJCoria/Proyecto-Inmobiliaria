@@ -8,5 +8,5 @@ public interface IRepositorioPropietario
     int Alta(Propietario p);
     int Baja(Propietario p);
     int Modificacion(Propietario p);
-    List<Propietario> ObtenerTodos();
+    IList<Propietario> ObtenerTodos();
 }
