@@ -19,7 +19,7 @@ public class RepositorioInquilino : RepositorioBase, IRepositorioInquilino
         BindParams(command, inquilino);
         connection.Open();
         idGenerado = Convert.ToInt32(command.ExecuteScalar());
-        inquilino.Id = idGenerado;
+        inquilino.Id_inquilino = idGenerado;
         return idGenerado;
     }
 
@@ -41,7 +41,7 @@ public class RepositorioInquilino : RepositorioBase, IRepositorioInquilino
     {
         int filasAfectadas = 0;
         using var connection = new MySqlConnection(connectionString);
-        string consultaSql = @"UPDATE Inquilino SET dni = @dni, nombre = @nombre, apellido = @apellido, telefono = @telefono, email = @email, estado = @estado WHERE id = @id";
+        string consultaSql = @"UPDATE Inquilino SET dni = @dni, nombre = @nombre, apellido = @apellido, telefono = @telefono, email = @email, estado = @estado WHERE id_inquilino = @id";
         using var command = new MySqlCommand(consultaSql, connection);
         BindParams(command, inquilino);
         BindId(command, inquilino);
@@ -50,10 +50,33 @@ public class RepositorioInquilino : RepositorioBase, IRepositorioInquilino
         return filasAfectadas;
     }
 
+    public IList<Inquilino> ObtenerTodos()
+    {
+        var inquilinos = new List<Inquilino>();
+        using var connection = new MySqlConnection(connectionString);
+        string consultaSql = @"SELECT id_inquilino, dni, nombre, apellido, telefono, email, estado FROM Inquilino";
+        using var command = new MySqlCommand(consultaSql, connection);
+        connection.Open();
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            inquilinos.Add(new Inquilino
+            {
+                Id_inquilino = reader.GetInt32("id_inquilino"),
+                Dni = reader.GetString("dni"),
+                Nombre = reader.GetString("nombre"),
+                Apellido = reader.GetString("apellido"),
+                Telefono = reader.GetString("telefono"),
+                Email = reader.GetString("email"),
+                Estado = reader.GetBoolean("estado")
+            });
+        }
+        return inquilinos;
+    }
 
     private static void BindId(MySqlCommand cmd, Inquilino inquilino)
     {
-        cmd.Parameters.AddWithValue("@id", inquilino.Id);
+        cmd.Parameters.AddWithValue("@id", inquilino.Id_inquilino);
     }
 
     private static void BindParams(MySqlCommand cmd, Inquilino inquilino)
