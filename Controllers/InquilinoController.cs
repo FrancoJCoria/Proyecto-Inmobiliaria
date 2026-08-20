@@ -48,16 +48,16 @@ public class InquilinoController : Controller
     }
 
     [HttpPut]
-    public IActionResult Update([FromBody] Inquilino inquilino)
+    public IActionResult Edit([FromBody] Inquilino inquilino)
     {
-        if(inquilino == null || inquilino.Id <= 0)
+        if(inquilino == null)
         {
             return BadRequest(new { error = "Se requiere un inquilino válido con un ID mayor a cero para la modificación." });
         }
         int filasAfectadas = _repositorio.Modificacion(inquilino);
         if(filasAfectadas == 0)
         {
-            return NotFound(new { error = $"No se encontró ningún inquilino con el ID {inquilino.Id}." });
+            return NotFound(new { error = $"No se encontró ningún inquilino con el ID {inquilino.Id_inquilino}." });
         }
         return Ok(new
         {
@@ -66,6 +66,11 @@ public class InquilinoController : Controller
         });
     }
     
-    
+    [HttpGet]
+    public IActionResult Index()
+    {
+        var inquilinos = _repositorio.ObtenerTodos();
+        return Ok(inquilinos);
+    }
 }
 
