@@ -261,7 +261,3 @@ paket-files/
 __pycache__/
 *.pyc
 .vscode/*
-
-.appsettings.json
-.appsettings.Development.json
-appsettings.json
