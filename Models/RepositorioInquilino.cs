@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 namespace Inmobiliaria.Models;
 
 
-public class RepositorioInquilino : RepositorioBase
+public class RepositorioInquilino : RepositorioBase, IRepositorioInquilino
 {
     public RepositorioInquilino(IConfiguration configuration) : base(configuration) { }
 

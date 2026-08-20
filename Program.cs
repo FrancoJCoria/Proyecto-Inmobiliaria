@@ -7,7 +7,7 @@ builder.Services.AddControllersWithViews();
 
 //REGISTRO DE REPOSITORIOS 
 builder.Services.AddScoped<IRepositorioPropietario, RepositorioPropietario>();
-
+builder.Services.AddScoped<IRepositorioInquilino, RepositorioInquilino>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
